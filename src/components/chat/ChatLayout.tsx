@@ -1,5 +1,6 @@
 "use client"
 import React from "react"
+import { MessagesSquare } from "lucide-react"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "../ui/resizable"
 import { cn } from "@/lib/utils"
 import Sidebar from "../Sidebar"
@@ -11,56 +12,62 @@ interface ChatLayoutProps {
     defaultLayout: number[] | undefined
     users: User[]
 }
-function ChatLayout({ defaultLayout = [320, 480], users }: ChatLayoutProps) {
+
+// Panel sizes are percentages of the group width
+const DEFAULT_LAYOUT = [28, 72]
+
+function ChatLayout({ defaultLayout = DEFAULT_LAYOUT, users }: ChatLayoutProps) {
     const [isCollapsed, setIsCollapsed] = React.useState(false)
     const [isMobile, setIsMobile] = React.useState(false)
     const { selectedUser } = useSelectedUser()
+
     React.useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth <= 768)
         handleResize()
-        console.log("isMobile", isMobile)
         window.addEventListener("resize", handleResize)
         return () => window.removeEventListener("resize", handleResize)
-    }, [isMobile])
+    }, [])
 
     return (
         <ResizablePanelGroup
             direction="horizontal"
-            className="h-full items-stretch bg-background rounded-lg"
+            className="h-full items-stretch"
             onLayout={(sizes: number[]) => {
-                document.cookie = `react-resizable-panels:layout=${JSON.stringify(sizes)};`
+                document.cookie = `react-resizable-panels:layout=${JSON.stringify(sizes)}; path=/`
             }}
         >
             <ResizablePanel
                 defaultSize={defaultLayout[0]}
                 collapsedSize={8}
                 collapsible={true}
-                minSize={isMobile ? 0 : 24}
-                maxSize={isMobile ? 8 : 30}
+                minSize={isMobile ? 0 : 22}
+                maxSize={isMobile ? 8 : 34}
                 onCollapse={() => {
                     setIsCollapsed(true)
-                    document.cookie = `react-resizable-panels:collaped=true;`
+                    document.cookie = `react-resizable-panels:collapsed=true; path=/`
                 }}
                 onExpand={() => {
                     setIsCollapsed(false)
-                    document.cookie = `react-resizable-panels:collaped=false;`
+                    document.cookie = `react-resizable-panels:collapsed=false; path=/`
                 }}
                 className={cn(
-                    isCollapsed && "min-w-[80px] transition-all duration-300 ease-in-out"
+                    "bg-muted/30",
+                    isCollapsed && "min-w-[72px] transition-all duration-300 ease-in-out"
                 )}
             >
-                <Sidebar isCollapsed={isCollapsed} users={users} />
+                <Sidebar isCollapsed={isCollapsed || isMobile} users={users} />
             </ResizablePanel>
-            <ResizableHandle withHandle />
+            <ResizableHandle />
             <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
                 {!selectedUser ? (
-                    <div className="flex justify-center items-center h-full w-full px-10">
-                        <div className="flex flex-col justify-center items-center gap-4">
-                            <img src="/logo.png" alt="Logo" className="w-full md:w-2/3 lg:w-1/2" />
-                            <p className="text-muted-foreground text-center">
-                                Click on a chat to view the messages
-                            </p>
+                    <div className="flex h-full w-full flex-col items-center justify-center gap-3 p-10 text-center">
+                        <div className="grid size-14 place-items-center rounded-2xl bg-primary/10 text-primary">
+                            <MessagesSquare className="size-7" />
                         </div>
+                        <h2 className="text-lg font-semibold tracking-tight">Your messages</h2>
+                        <p className="max-w-xs text-muted-foreground">
+                            Pick a conversation from the sidebar to start chatting.
+                        </p>
                     </div>
                 ) : (
                     <MessageContainer />

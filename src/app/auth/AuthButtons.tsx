@@ -13,7 +13,7 @@ function AuthButtons() {
                 </Button>
             </RegisterLink>
             <LoginLink className="flex-1">
-                <Button className="w-full" disabled={isLoading}>Login</Button>
+                <Button className="w-full bg-white text-zinc-900 hover:bg-white/90" disabled={isLoading}>Login</Button>
             </LoginLink>
         </div>
     )

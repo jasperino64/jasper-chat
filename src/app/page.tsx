@@ -5,6 +5,7 @@ import { redis } from "@/lib/db"
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
+import { MessagesSquare } from "lucide-react"
 
 async function getUsers(): Promise<User[]> {
     const userKeys: string[] = []
@@ -46,23 +47,40 @@ export default async function Home() {
         redirect("/auth")
     }
 
-    const layout = (await cookies()).get("react-resize-layout-panels:layout")
-    console.log(layout)
-    const defaultLayout = layout ? JSON.parse(layout.value) : undefined
+    const layoutCookie = (await cookies()).get("react-resizable-panels:layout")
+    let defaultLayout: number[] | undefined
+    try {
+        defaultLayout = layoutCookie ? JSON.parse(layoutCookie.value) : undefined
+    } catch {
+        defaultLayout = undefined
+    }
 
     const users = await getUsers()
 
     return (
-        <main className="flex h-screen flex-col items-center justify-center p-4 md:px-24 py-32 gap-4">
-            <PreferencesTab />
-            {/* dotted background */}
+        <main className="relative isolate flex h-dvh flex-col gap-3 p-2 sm:p-4 md:p-6">
+            {/* soft brand glow + faded dot grid */}
             <div
-                className="absolute top-0 z-[-2] h-screen w-screen dark:bg-[#000000] dark:bg-[radial-gradient(#ffffff33_1px,#00091d_1px)]
-				dark:bg-[size:20px_20px] bg-[#ffffff] bg-[radial-gradient(#00000033_1px,#ffffff_1px)] bg-[size:20px_20px]"
                 aria-hidden="true"
+                className="pointer-events-none fixed inset-x-0 top-0 -z-10 h-[28rem] bg-[radial-gradient(60%_100%_at_50%_0%,hsl(var(--primary)/0.14),transparent)]"
             />
-            <div className="z-10 border rounded-lg max-w-5xl w-full min-h-[85vh] text-sm lg:flex">
-                <ChatLayout defaultLayout={defaultLayout} users={users}/>
+            <div
+                aria-hidden="true"
+                className="pointer-events-none fixed inset-0 -z-20 bg-[radial-gradient(hsl(var(--foreground)/0.07)_1px,transparent_1px)] [background-size:20px_20px] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]"
+            />
+
+            <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-1">
+                <div className="flex items-center gap-2.5">
+                    <div className="grid size-8 place-items-center rounded-lg bg-primary text-primary-foreground shadow-sm shadow-primary/30">
+                        <MessagesSquare className="size-4" />
+                    </div>
+                    <span className="text-base font-semibold tracking-tight">Redis Chat</span>
+                </div>
+                <PreferencesTab />
+            </header>
+
+            <div className="mx-auto flex min-h-0 w-full max-w-6xl flex-1 overflow-hidden rounded-2xl border bg-card text-sm shadow-xl shadow-black/[0.04] dark:shadow-black/40">
+                <ChatLayout defaultLayout={defaultLayout} users={users} />
             </div>
         </main>
     )

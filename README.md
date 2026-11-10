@@ -16,6 +16,27 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Environment variables
+
+Add the following settings to `.env.local`:
+
+```env
+KINDE_ISSUER_URL=
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
+PUSHER_APP_ID=
+PUSHER_APP_KEY=
+PUSHER_APP_SECRET=
+PUSHER_APP_CLUSTER=
+NEXT_PUBLIC_PUSHER_APP_KEY=
+NEXT_PUBLIC_PUSHER_APP_CLUSTER=
+```
+
+Configure Kinde for authentication and provide its issuer URL. The Upstash
+Redis settings are required for user and message data. Pusher settings enable
+realtime messaging; without them, the app can render but realtime updates are
+disabled.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

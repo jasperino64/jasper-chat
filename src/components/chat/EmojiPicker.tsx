@@ -11,19 +11,28 @@ interface EmojiPickerProps {
 }
 
 const EmojiPicker = ({ onChange }: EmojiPickerProps) => {
-    const { theme } = useTheme()
+    const { resolvedTheme } = useTheme()
 
     return (
         <Popover>
-            <PopoverTrigger>
-                <SmileIcon className="h-5 w-5 text-muted-foreground hover:text-foreground transition" />
+            <PopoverTrigger
+                aria-label="Insert emoji"
+                className="grid size-8 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+                <SmileIcon className="size-5" />
             </PopoverTrigger>
-            <PopoverContent className="w-full">
+            <PopoverContent
+                side="top"
+                align="end"
+                sideOffset={10}
+                className="w-auto border-0 bg-transparent p-0 shadow-none"
+            >
                 <Picker
                     emojiSize={18}
                     data={data}
                     maxFrequentRows={1}
-                    theme={theme === "dark" ? "dark" : "light"}
+                    previewPosition="none"
+                    theme={resolvedTheme === "dark" ? "dark" : "light"}
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     onEmojiSelect={(emoji: any) => onChange(emoji.native)}
                 />
