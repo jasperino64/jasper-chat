@@ -86,7 +86,7 @@ function Sidebar({ isCollapsed, users }: SidebarProps) {
                                     className={cn(
                                         "group flex w-full items-center gap-3 rounded-xl px-2.5 py-2 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                                         isSelected
-                                            ? "bg-background shadow-sm ring-1 ring-border"
+                                            ? "bg-card shadow-sm ring-1 ring-border dark:bg-accent"
                                             : "hover:bg-accent/70"
                                     )}
                                 >
