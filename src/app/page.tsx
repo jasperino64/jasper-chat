@@ -62,7 +62,7 @@ export default async function Home() {
             {/* soft brand glow + faded dot grid */}
             <div
                 aria-hidden="true"
-                className="pointer-events-none fixed inset-x-0 top-0 -z-10 h-[28rem] bg-[radial-gradient(60%_100%_at_50%_0%,hsl(var(--primary)/0.14),transparent)]"
+                className="pointer-events-none fixed inset-x-0 top-0 -z-10 h-[40rem] bg-[radial-gradient(75%_100%_at_50%_0%,hsl(var(--primary)/0.32),hsl(var(--primary)/0.08)_55%,transparent)] dark:bg-[radial-gradient(75%_100%_at_50%_0%,hsl(var(--primary)/0.26),hsl(var(--primary)/0.06)_55%,transparent)]"
             />
             <div
                 aria-hidden="true"
